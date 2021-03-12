@@ -1,0 +1,42 @@
+.c-day {
+	flex: 1 1 0;
+
+	&:not(:last-child) {
+		border-right: 1px solid #e6e6e9;
+	}
+
+	&.is-today {
+		flex: 0 0 auto;
+		width: 25%;
+
+		.c-day__title {
+			color: #2c66ee;
+		}
+	}
+
+	&.is-past {
+		color: #ddd;
+	}
+}
+
+.c-day__header {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	text-transform: uppercase;
+	min-height: 110px;
+	padding: 40px 20px 20px;
+}
+
+.c-day__date {
+	font-size: 0.875rem;
+	font-weight: 700;
+}
+
+.c-day__list {
+	overflow-y: scroll;
+	height: calc(100vh - 160px);
+	padding: 20px;
+}

@@ -1,0 +1,63 @@
+.c-to-do__item {
+	position: relative;
+	border-bottom: 1px solid #e6e6e9;
+	padding: 8px 0;
+
+	&.is-complete {
+		.c-to-do__edit {
+			color: currentcolor;
+			text-decoration: line-through;
+
+			&:focus {
+				color: #000;
+				text-decoration: none;
+			}
+		}
+	}
+
+	&:focus,
+	&:hover {
+		outline: none;
+
+		.c-to-do__actions {
+			display: flex;
+		}
+	}
+}
+
+.c-to-do__edit {
+	&:focus {
+		outline: none;
+		border-color: transparent;
+		box-shadow: 0 0 0 8px #fff,
+					0 0 0 9px #2c66ee;
+	}
+}
+
+.c-to-do__actions {
+	display: none;
+	justify-content: flex-end;
+	align-items: center;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(255, 255, 255, 0.95);
+	padding-left: 12px;
+
+	button {
+		transition: transform 0.1s;
+
+		&:not(:last-child) {
+			margin-right: 12px;
+		}
+
+		&:hover {
+			transform: scale3d(1.1, 1.1, 1.1);
+
+			svg {
+				fill: #2c66ee;
+			}
+		}
+	}
+}
