@@ -1,14 +1,55 @@
-import './App.scss';
+import { useEffect, useReducer } from 'react';
 import { Day } from './components/';
-import { areSameDate } from './dates/';
-
+import { areSameDate, getDatetime } from './dates/';
+import { useLocalStorage } from './hooks/';
+import { uuid } from './utils/';
+import './App.scss';
 
 function App() {
-	const today = new Date();
+	const [initialState, setTodos] = useLocalStorage('todos', []);
+
+	const todoReducer = (state, action) => {
+		switch (action.type) {
+			case 'toggleComplete':
+				return state.map(todo => todo.id === action.id
+					? {...todo, complete: !todo.complete}
+					: todo
+				);
+			case 'add':
+				return [...state, {
+					id: uuid(),
+					value: action.value,
+					date: getDatetime(action.date),
+					complete: false,
+				}];
+			case 'update':
+				return state.map(todo => todo.id === action.id
+					? {...todo, value: action.value}
+					: todo
+				);
+			case 'remove':
+				return state.filter(todo => todo.id !== action.id);
+			case 'moveToDate':
+				return state.map(todo => todo.id === action.id
+					? {...todo, date: getDatetime(action.date)}
+					: todo
+				);
+			default:
+				return state;
+		}
+	}
+
+	const [todos, dispatch] = useReducer(todoReducer, initialState);
+
+	useEffect(() => {
+		setTodos(todos);
+	}, [JSON.stringify(todos)]);
 
 	const getDatesToDos = (todos, date) => {
 		return todos.reduce((datesTodos, todo) => {
-			if (areSameDate(date, todo.date)) {
+			const toDoDate = new Date(`${ todo.date }T00:00:00`);
+
+			if (areSameDate(date, toDoDate)) {
 				datesTodos.push(todo);
 			}
 
@@ -16,33 +57,11 @@ function App() {
 		}, []);
 	};
 
-	let todos = [
-		{
-			id: 1,
-			date: new Date(today.getTime() - 864e5),
-			value: 'Call mom',
-			complete: true,
-		},
-		{
-			id: 2,
-			date: new Date(),
-			value: 'Call dad',
-			complete: false,
-		},
-		{
-			id: 3,
-			date: new Date(),
-			value: 'Get groceries for the following week, like milk',
-			complete: false,
-		},
-	];
-
+	const today = new Date();
 	const days = [
 		new Date(today.getTime() - 864e5),
 		today,
 		new Date(today.getTime() + 864e5),
-		new Date(today.getTime() + (864e5 * 2)),
-		new Date(today.getTime() + (864e5 * 3)),
 	];
 
 	return (
@@ -53,6 +72,7 @@ function App() {
 						key={ `day-${ day.getDate() }` }
 						date={ day }
 						todos={ getDatesToDos(todos, day) }
+						dispatch={ dispatch }
 					/>
 				);
 			}) }

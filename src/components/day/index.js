@@ -1,10 +1,10 @@
-import { ToDo } from '../';
+import { Todo, NewTodo } from '../';
 import {
 	areSameDate,
 	getDateString,
 	getDayString,
 	getDatetime,
-	isPast,
+	isBeforeToday,
 } from '../../dates/';
 import { classnames } from '../../utils/';
 import './index.scss';
@@ -12,13 +12,14 @@ import './index.scss';
 const Day = ({
 	date,
 	todos,
+	dispatch,
 }) => {
 	const today = new Date();
 
 	return (
 		<div className={ classnames(
 			'c-day',
-			isPast(date) ? 'is-past' : '',
+			isBeforeToday(date) ? 'is-past' : '',
 			areSameDate(today, date) ? 'is-today' : '',
 		) }>
 			<div className="c-day__header">
@@ -36,21 +37,19 @@ const Day = ({
 				<ul className="o-list-bare c-to-do__list">
 					{ todos.map((todo) => {
 						return (
-							<ToDo
+							<Todo
 								key={ `todo-${ todo.id }` }
-								value={ todo.value }
-								isComplete={ todo.complete }
-								onChangeValue={ (value) => console.log(value) }
-								onToggleComplete={ () => console.log('toggle complte') }
-								onDelete={ () => console.log('delete') }
-								onMoveToTomorrow={ () => console.log('move') }
+								todo={ todo }
+								dispatch={ dispatch }
 							/>
 						);
 					}) }
-					<ToDo
-						newItem={ true }
-						onChangeValue={ (value) => console.log(value) }
-					/>
+					{ !isBeforeToday(date) && (
+						<NewTodo
+							date={ date }
+							dispatch={ dispatch }
+						/>
+					) }
 				</ul>
 			</div>
 		</div>
