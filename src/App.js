@@ -6,8 +6,6 @@ import { uuid } from './utils/';
 import './App.scss';
 
 function App() {
-	const [initialState, setTodos] = useLocalStorage('todos', []);
-
 	const todoReducer = (state, action) => {
 		switch (action.type) {
 			case 'toggleComplete':
@@ -39,13 +37,14 @@ function App() {
 		}
 	}
 
+	const [initialState, setTodos] = useLocalStorage('todos', []);
 	const [todos, dispatch] = useReducer(todoReducer, initialState);
 
 	useEffect(() => {
 		setTodos(todos);
 	}, [JSON.stringify(todos)]);
 
-	const getDatesToDos = (todos, date) => {
+	const getDatesTodos = (todos, date) => {
 		return todos.reduce((datesTodos, todo) => {
 			const toDoDate = new Date(`${ todo.date }T00:00:00`);
 
@@ -71,7 +70,7 @@ function App() {
 					<Day
 						key={ `day-${ day.getDate() }` }
 						date={ day }
-						todos={ getDatesToDos(todos, day) }
+						todos={ getDatesTodos(todos, day) }
 						dispatch={ dispatch }
 					/>
 				);

@@ -4,6 +4,7 @@ import {
 	getDateString,
 	getDayString,
 	getDatetime,
+	isAfterToday,
 	isBeforeToday,
 } from '../../dates/';
 import { classnames } from '../../utils/';
@@ -21,6 +22,7 @@ const Day = ({
 			'c-day',
 			isBeforeToday(date) ? 'is-past' : '',
 			areSameDate(today, date) ? 'is-today' : '',
+			isAfterToday(date) ? 'is-future' : '',
 		) }>
 			<div className="c-day__header">
 				<h2 className="c-day__title">

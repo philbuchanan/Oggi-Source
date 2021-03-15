@@ -4,20 +4,9 @@
 	padding: 5px;
 	border-radius: 3px;
 
-	svg {
-		fill: #727272;
-	}
-
 	&:hover,
 	&:focus {
 		outline: none;
-
-		svg {
-			fill: #000;
-		}
-	}
-
-	&:focus {
 		background-color: rgba(#2c66ee, 0.05);
 		box-shadow: 0 0 0 1px rgba(#2c66ee, 0.2);
 	}
