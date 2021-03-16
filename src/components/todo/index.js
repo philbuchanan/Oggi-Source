@@ -11,40 +11,42 @@ import { classnames } from '../../utils';
 import './index.scss';
 
 const Todo = ({
-	todo,
+	id,
+	value,
+	date,
+	isComplete,
 	dispatch,
 }) => {
 	const [isFocused, setIsFocused] = useState(false);
-
-	const todoDate = new Date(`${ todo.date }T00:00:00`);
 
 	return (
 		<li
 			className={ classnames(
 				'c-to-do__item',
-				todo.complete ? 'is-complete' : '',
+				isComplete ? 'is-complete' : '',
 				isFocused ? 'is-focused' : ''
 			) }
 		>
 			<ContentEditable
 				className="c-to-do__edit"
-				value={ todo.value }
+				value={ value }
+				disabled={ isBeforeToday(date) }
 				onChangeFocus={ (state) => setIsFocused(state) }
 				onSave={ (value) => dispatch({
 					type: 'update',
-					id: todo.id,
+					id: id,
 					value: value,
 				}) }
-				onEsc={ (ref) => ref.current.innerText = todo.value }
+				onEsc={ (ref) => ref.current.innerText = value }
 			/>
-			{ !isBeforeToday(todoDate) && (
+			{ !isBeforeToday(date) && (
 				<div className="c-to-do__actions">
 					<IconButton
-						label={ todo.complete ? 'Mark imcomplete' : 'Mark complete' }
+						label={ isComplete ? 'Mark imcomplete' : 'Mark complete' }
 						icon="checkmark"
 						onClick={ () => dispatch({
 							type: 'toggleComplete',
-							id: todo.id,
+							id: id,
 						}) }
 						onFocus={ () => setIsFocused(true) }
 						onBlur={ () => setIsFocused(false) }
@@ -53,24 +55,24 @@ const Todo = ({
 						label="Delete"
 						icon="trash"
 						onClick={ () => {
-							if (confirm(`Delete “${ todo.value }”?`)) {
+							if (confirm(`Delete “${ value }”?`)) {
 								dispatch({
 									type: 'remove',
-									id: todo.id,
+									id: id,
 								});
 							}
 						} }
 						onFocus={ () => setIsFocused(true) }
 						onBlur={ () => setIsFocused(false) }
 					/>
-					{ isAfterToday(todoDate) ? (
+					{ isAfterToday(date) ? (
 						<IconButton
 							label="Move to today"
 							icon="moveLeft"
 							onClick={ () => dispatch({
 								type: 'moveToDate',
-								id: todo.id,
-								date: new Date(todoDate.getTime() - 864e5),
+								id: id,
+								date: new Date(date.getTime() - 864e5),
 							}) }
 							onFocus={ () => setIsFocused(true) }
 							onBlur={ () => setIsFocused(false) }
@@ -81,8 +83,8 @@ const Todo = ({
 							icon="moveRight"
 							onClick={ () => dispatch({
 								type: 'moveToDate',
-								id: todo.id,
-								date: new Date(todoDate.getTime() + 864e5),
+								id: id,
+								date: new Date(date.getTime() + 864e5),
 							}) }
 							onFocus={ () => setIsFocused(true) }
 							onBlur={ () => setIsFocused(false) }

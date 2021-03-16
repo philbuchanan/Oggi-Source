@@ -3,7 +3,7 @@ import {
 	areSameDate,
 	getDateString,
 	getDayString,
-	getDatetime,
+	getShortDateString,
 	isAfterToday,
 	isBeforeToday,
 } from '../../dates/';
@@ -29,7 +29,7 @@ const Day = ({
 					{ getDayString(date) }
 				</h2>
 				<time
-					datatime={ getDatetime(date) }
+					datatime={ getShortDateString(date) }
 					className="c-day__date"
 				>
 					{ getDateString(date) }
@@ -37,11 +37,14 @@ const Day = ({
 			</div>
 			<div className="c-day__list">
 				<ul className="o-list-bare c-to-do__list">
-					{ todos.map((todo) => {
+					{ todos.map((todo, index) => {
 						return (
 							<Todo
 								key={ `todo-${ todo.id }` }
-								todo={ todo }
+								id={ todo.id }
+								value={ todo.value }
+								date={ date }
+								isComplete={ todo.complete }
 								dispatch={ dispatch }
 							/>
 						);

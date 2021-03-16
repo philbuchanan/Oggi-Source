@@ -1,4 +1,4 @@
-const getDatetime = (date) => {
+const getShortDateString = (date) => {
 	if (typeof date.getMonth !== 'function') {
 		return '';
 	}
@@ -9,4 +9,4 @@ const getDatetime = (date) => {
 	return `${ date.getFullYear() }-${ month }-${ day }`;
 };
 
-export default getDatetime;
+export default getShortDateString;

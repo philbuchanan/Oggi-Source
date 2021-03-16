@@ -2,6 +2,7 @@ import { useRef } from 'react';
 
 const ContentEditable = ({
 	value,
+	disabled,
 	onSave,
 	onChangeFocus,
 	onEsc,
@@ -20,8 +21,8 @@ const ContentEditable = ({
 	return (
 		<div
 			ref={ editableRef }
-			contentEditable={ true }
-			suppressContentEditableWarning={ true }
+			contentEditable={ disabled ? null : true }
+			suppressContentEditableWarning={ disabled ? null : true }
 			onFocus={ () => onChangeFocus(true) }
 			onBlur={ (event) => {
 				onChangeFocus(false);

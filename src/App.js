@@ -1,11 +1,43 @@
 import { useEffect, useReducer } from 'react';
 import { Day } from './components/';
-import { areSameDate, getDatetime } from './dates/';
+import { areSameDate, getShortDateString } from './dates/';
 import { useLocalStorage } from './hooks/';
 import { uuid } from './utils/';
 import './App.scss';
 
 function App() {
+
+
+	// const temp = [
+	// 	{
+	// 		date: '2021-03-16',
+	// 		todos: [
+	// 			{
+	// 				value: 'Buy milk',
+	// 				complete: false,
+	// 			},
+	// 			{
+	// 				value: 'Buy butter',
+	// 				complete: false,
+	// 			},
+	// 			{
+	// 				value: 'Buy eggs',
+	// 				complete: false,
+	// 			},
+	// 		],
+	// 	},
+	// 	{
+	// 		date: '2021-03-17',
+	// 		todos: [
+	// 			{
+	// 				value: 'Do some work',
+	// 				complete: false,
+	// 			},
+	// 		],
+	// 	}
+	// ];
+
+
 	const todoReducer = (state, action) => {
 		switch (action.type) {
 			case 'toggleComplete':
@@ -17,7 +49,7 @@ function App() {
 				return [...state, {
 					id: uuid(),
 					value: action.value,
-					date: getDatetime(action.date),
+					date: getShortDateString(action.date),
 					complete: false,
 				}];
 			case 'update':
@@ -29,7 +61,7 @@ function App() {
 				return state.filter(todo => todo.id !== action.id);
 			case 'moveToDate':
 				return state.map(todo => todo.id === action.id
-					? {...todo, date: getDatetime(action.date)}
+					? {...todo, date: getShortDateString(action.date)}
 					: todo
 				);
 			default:
@@ -40,15 +72,16 @@ function App() {
 	const [initialState, setTodos] = useLocalStorage('todos', []);
 	const [todos, dispatch] = useReducer(todoReducer, initialState);
 
+
 	useEffect(() => {
 		setTodos(todos);
 	}, [JSON.stringify(todos)]);
 
 	const getDatesTodos = (todos, date) => {
-		return todos.reduce((datesTodos, todo) => {
-			const toDoDate = new Date(`${ todo.date }T00:00:00`);
+		const dateString = getShortDateString(date);
 
-			if (areSameDate(date, toDoDate)) {
+		return todos.reduce((datesTodos, todo) => {
+			if (dateString === todo.date) {
 				datesTodos.push(todo);
 			}
 
