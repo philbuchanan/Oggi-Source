@@ -1,13 +1,22 @@
 .c-icon-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	width: 30px;
 	height: 30px;
 	padding: 5px;
 	border-radius: 3px;
+	overflow: hidden;
 
 	&:hover,
 	&:focus {
 		outline: none;
 		background-color: rgba(#2c66ee, 0.05);
 		box-shadow: 0 0 0 1px rgba(#2c66ee, 0.2);
+	}
+
+	&[disabled] {
+		pointer-events: none;
+		opacity: 0.3;
 	}
 }

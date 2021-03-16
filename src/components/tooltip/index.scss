@@ -1,0 +1,36 @@
+$arrow-size: 5px;
+
+.c-tooltip {
+	position: relative;
+}
+
+.c-tooltip__popover {
+	$position: ($arrow-size * 2);
+
+	position: absolute;
+	top: calc(100% + #{ $position });
+	right: calc(50% - #{ $position });
+	color: #fff;
+	background-color: #444;
+	text-align: center;
+	font-size: 0.875rem;
+	border-radius: 3px;
+	min-width: 125px;
+	padding: 5px 6px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+	z-index: 900;
+
+	&:after {
+		content: "";
+		display: block;
+		position: absolute;
+		width: 0;
+		height: 0;
+		top: -($arrow-size);
+		right: 0;
+		border-left: $arrow-size solid transparent;
+		border-right: $arrow-size solid transparent;
+		border-bottom: $arrow-size solid #444;
+		transform: translateX(-50%);
+	}
+}

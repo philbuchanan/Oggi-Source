@@ -37,13 +37,16 @@ const Day = ({
 			</div>
 			<div className="c-day__list">
 				<ul className="o-list-bare c-to-do__list">
-					{ todos.map((todo, index) => {
+					{ todos.sort((a, b) => a.order > b.order).map((todo, index) => {
 						return (
 							<Todo
 								key={ `todo-${ todo.id }` }
 								id={ todo.id }
 								value={ todo.value }
 								date={ date }
+								order={ todo.order }
+								canMoveUp={ todo.order > 0 }
+								canMoveDown={ todo.order < todos.length - 1 }
 								isComplete={ todo.complete }
 								dispatch={ dispatch }
 							/>

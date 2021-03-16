@@ -6,6 +6,22 @@ import { uuid } from './utils/';
 import './App.scss';
 
 function App() {
+	const getDatesTodos = (state, date) => {
+		const dateString = getShortDateString(date);
+
+		return state.reduce((todos, todo) => {
+			if (dateString === todo.date) {
+				todos.push(todo);
+			}
+
+			return todos;
+		}, []);
+	};
+
+	const getDatesTodoCount = (state, date) => {
+		return getDatesTodos(state, date).length;
+	};
+
 	const todoReducer = (state, action) => {
 		switch (action.type) {
 			case 'toggleComplete':
@@ -18,6 +34,7 @@ function App() {
 					id: uuid(),
 					value: action.value,
 					date: getShortDateString(action.date),
+					order: getDatesTodoCount(state, action.date),
 					complete: false,
 				}];
 			case 'update':
@@ -26,12 +43,79 @@ function App() {
 					: todo
 				);
 			case 'remove':
-				return state.filter(todo => todo.id !== action.id);
+				let reorderDate = getShortDateString(action.date);
+
+				return state.reduce((newState, todo) => {
+					if (todo.id !== action.id) {
+						newState.push(
+							todo.date === reorderDate
+							&& todo.order > action.order
+								? {...todo, order: todo.order - 1}
+								: todo
+						);
+					}
+
+					return newState;
+				}, []);
 			case 'moveToDate':
-				return state.map(todo => todo.id === action.id
-					? {...todo, date: getShortDateString(action.date)}
-					: todo
-				);
+				const fromDate = getShortDateString(action.from);
+				const toDatesTodoCount = getDatesTodoCount(state, action.to);
+
+				return state.map(todo => {
+					if (todo.id === action.id) {
+						return {
+							...todo,
+							date: getShortDateString(action.to),
+							order: toDatesTodoCount,
+						};
+					}
+					else if (
+						todo.date === fromDate
+						&& todo.order > action.order
+					) {
+						return {
+							...todo,
+							order: todo.order - 1,
+						};
+					}
+
+					return todo;
+				});
+			case 'moveToPosition':
+				const moveDirection = action.from - action.to;
+				const day = getShortDateString(action.date);
+
+				if (moveDirection === 0) {
+					return state;
+				}
+
+				return state.reduce((reordered, todo) => {
+					let newTodo = {...todo};
+
+					if (todo.date === day) {
+						if (action.id === todo.id) {
+							newTodo = {...todo, order: action.to};
+						}
+						else if (
+							moveDirection < 0 // negative numbers mean move down
+							&& todo.order > action.from
+							&& todo.order <= action.to
+						) {
+							newTodo = {...todo, order: todo.order - 1};
+						}
+						else if (
+							moveDirection > 0 // positive numbers mean move up
+							&& todo.order >= action.to
+							&& todo.order < action.from
+						) {
+							newTodo = {...todo, order: todo.order + 1};
+						}
+					}
+
+					reordered.push(newTodo);
+
+					return reordered;
+				}, []);
 			default:
 				return state;
 		}
@@ -40,22 +124,9 @@ function App() {
 	const [initialState, setTodos] = useLocalStorage('todos', []);
 	const [todos, dispatch] = useReducer(todoReducer, initialState);
 
-
 	useEffect(() => {
 		setTodos(todos);
 	}, [JSON.stringify(todos)]);
-
-	const getDatesTodos = (todos, date) => {
-		const dateString = getShortDateString(date);
-
-		return todos.reduce((datesTodos, todo) => {
-			if (dateString === todo.date) {
-				datesTodos.push(todo);
-			}
-
-			return datesTodos;
-		}, []);
-	};
 
 	const today = new Date();
 	const days = [
