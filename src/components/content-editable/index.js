@@ -29,11 +29,11 @@ const ContentEditable = ({
 				onSaveValue(event);
 			} }
 			onKeyDown={ (event) => {
-				if (event.keyCode === 13) { // Enter key
+				if (event.key === 'Enter') { // Enter key
 					event.preventDefault();
 					onSaveValue(event);
 				}
-				else if (event.keyCode === 27) { // Esc key
+				else if (event.key === 'Escape') { // Esc key
 					onEsc(editableRef);
 				}
 			} }
