@@ -6,38 +6,6 @@ import { uuid } from './utils/';
 import './App.scss';
 
 function App() {
-
-
-	// const temp = [
-	// 	{
-	// 		date: '2021-03-16',
-	// 		todos: [
-	// 			{
-	// 				value: 'Buy milk',
-	// 				complete: false,
-	// 			},
-	// 			{
-	// 				value: 'Buy butter',
-	// 				complete: false,
-	// 			},
-	// 			{
-	// 				value: 'Buy eggs',
-	// 				complete: false,
-	// 			},
-	// 		],
-	// 	},
-	// 	{
-	// 		date: '2021-03-17',
-	// 		todos: [
-	// 			{
-	// 				value: 'Do some work',
-	// 				complete: false,
-	// 			},
-	// 		],
-	// 	}
-	// ];
-
-
 	const todoReducer = (state, action) => {
 		switch (action.type) {
 			case 'toggleComplete':
