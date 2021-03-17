@@ -15,13 +15,11 @@ const Day = ({
 	todos,
 	dispatch,
 }) => {
-	const today = new Date();
-
 	return (
 		<div className={ classnames(
 			'c-day',
 			isBeforeToday(date) ? 'is-past' : '',
-			areSameDate(today, date) ? 'is-today' : '',
+			areSameDate(new Date(), date) ? 'is-today' : '',
 			isAfterToday(date) ? 'is-future' : '',
 		) }>
 			<div className="c-day__header">

@@ -1,11 +1,18 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import { Day } from './components/';
-import { areSameDate, getShortDateString } from './dates/';
+import {
+	areSameDate,
+	getShortDateString,
+	isBeforeToday,
+	isBeforeYesterday,
+} from './dates/';
 import { useLocalStorage } from './hooks/';
 import { uuid } from './utils/';
 import './App.scss';
 
 function App() {
+	const [today, setToday] = useState(new Date());
+
 	const getDatesTodos = (state, date) => {
 		const dateString = getShortDateString(date);
 
@@ -116,6 +123,8 @@ function App() {
 
 					return reordered;
 				}, []);
+			case 'replaceState':
+				return action.state;
 			default:
 				return state;
 		}
@@ -125,10 +134,54 @@ function App() {
 	const [todos, dispatch] = useReducer(todoReducer, initialState);
 
 	useEffect(() => {
+		let todoOrderStart = getDatesTodoCount(todos, today);
+
+		const updatedTodos = todos.reduce((newTodos, todo) => {
+			const todoDate = new Date(`${ todo.date }T00:00:00`);
+
+			if (isBeforeToday(todoDate)) {
+				if (!todo.complete) {
+					newTodos.push({
+						...todo,
+						date: getShortDateString(today),
+						order: todoOrderStart,
+					});
+
+					todoOrderStart += 1;
+				}
+				else if (!isBeforeYesterday(todoDate)) {
+					newTodos.push(todo);
+				}
+			}
+			else {
+				newTodos.push(todo);
+			}
+
+			return newTodos;
+		}, []);
+
+		dispatch({
+			type: 'replaceState',
+			state: updatedTodos,
+		});
+
+		// Rerun at the end of the day
+		const midnight = new Date();
+		midnight.setHours(24, 0, 0, 0);
+
+		const endOfDayTimer = setTimeout(() => {
+			setToday(new Date());
+		}, midnight.getTime() - today.getTime() + 1000);
+
+		return () => {
+			clearTimeout(endOfDayTimer);
+		}
+	}, [getShortDateString(today)]);
+
+	useEffect(() => {
 		setTodos(todos);
 	}, [JSON.stringify(todos)]);
 
-	const today = new Date();
 	const days = [
 		new Date(today.getTime() - 864e5),
 		today,

@@ -5,6 +5,7 @@ export { default as getDayString } from './get-day-string';
 export { default as getShortDateString } from './get-short-date-string';
 export { default as isAfterToday } from './is-after-today';
 export { default as isBeforeToday } from './is-before-today';
+export { default as isBeforeYesterday } from './is-before-yesterday';
 export { default as isToday } from './is-today';
 export { default as isTomorrow } from './is-tomorrow';
 export { default as isYesterday } from './is-yesterday';
