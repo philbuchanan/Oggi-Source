@@ -11,11 +11,7 @@ const ContentEditable = ({
 	const editableRef = useRef(null);
 
 	const onSaveValue = (event) => {
-		const value = event.target.innerText.trim();
-
-		if (value !== '') {
-			onSave(value, editableRef);
-		}
+		onSave(event.target.innerText.trim(), editableRef);
 	}
 
 	return (

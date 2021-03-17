@@ -36,11 +36,23 @@ const Todo = ({
 				value={ value }
 				disabled={ isBeforeToday(date) }
 				onChangeFocus={ (state) => setIsFocused(state) }
-				onSave={ (value) => dispatch({
-					type: 'update',
-					id: id,
-					value: value,
-				}) }
+				onSave={ (value) => {
+					if (value === '') {
+						dispatch({
+							type: 'remove',
+							id: id,
+							date: date,
+							order: order,
+						});
+					}
+					else {
+						dispatch({
+							type: 'update',
+							id: id,
+							value: value.trim(),
+						});
+					}
+				} }
 				onEsc={ (ref) => ref.current.innerText = value }
 			/>
 			{ !isBeforeToday(date) && (

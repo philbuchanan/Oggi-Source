@@ -20,13 +20,15 @@ const NewTodo = ({
 				value=""
 				onChangeFocus={ (state) => setIsFocused(state) }
 				onSave={ (value, ref) => {
-					dispatch({
-						type: 'add',
-						value: value,
-						date: date,
-					});
+					if (value !== '') {
+						dispatch({
+							type: 'add',
+							value: value,
+							date: date,
+						});
 
-					ref.current.innerText = '';
+						ref.current.innerText = '';
+					}
 				} }
 				onEsc={ (ref) => ref.current.innerText = '' }
 			/>
