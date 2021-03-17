@@ -30,6 +30,9 @@ const NewTodo = ({
 				} }
 				onEsc={ (ref) => ref.current.innerText = '' }
 			/>
+			<div className="c-to-do__edit-placeholder">
+				+ Add
+			</div>
 		</div>
 	);
 };
