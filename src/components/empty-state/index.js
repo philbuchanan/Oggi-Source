@@ -4,9 +4,13 @@ import rocket from './rocket.png';
 const EmptyState = ({
 	showIcon = false,
 	children,
+	...props
 }) => {
 	return (
-		<div className="c-empty-state">
+		<div
+			className="c-empty-state"
+			{ ...props }
+		>
 			<div className="c-empty-state__content">
 				{ showIcon && (
 					<div className="c-empty-state__icon">

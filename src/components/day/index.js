@@ -19,13 +19,16 @@ const Day = ({
 	todos,
 	dispatch,
 }) => {
-	const remainingTasks = todos.filter((todo) => !todo.complete).length;
+	const sortedTodos = todos.sort((a, b) => a.order > b.order);
+	const completedTasks = sortedTodos.filter((todo) => todo.complete);
+	const remainingTasks = sortedTodos.filter((todo) => !todo.complete);
 	const isToday = areSameDate(new Date(), date);
+	const isPast = isBeforeToday(date);
 
 	return (
 		<div className={ classnames(
 			'c-day',
-			isBeforeToday(date) ? 'is-past' : '',
+			isPast ? 'is-past' : '',
 			isToday ? 'is-today' : '',
 			isAfterToday(date) ? 'is-future' : '',
 		) }>
@@ -39,19 +42,28 @@ const Day = ({
 				>
 					{ getDateString(date) }
 				</time>
-				{ isToday && todos.length > 0 && remainingTasks === 0 && (
+				{ isToday && todos.length > 0 && remainingTasks.length === 0 && (
 					<EmptyState showIcon={ true }>
 						You’ve completed everything for the day!
 					</EmptyState>
 				) }
 			</div>
 			<div className="c-day__list">
+				{ isPast && todos.length === 0 && (
+					<EmptyState
+						style={ {
+							marginTop: '40px',
+						} }
+					>
+						Tasks you complete today<br/>will show up here tomorrow.
+					</EmptyState>
+				) }
 				<ul className="o-list-bare c-to-do__list">
-					{ todos.sort((a, b) => a.order > b.order).map((todo, index) => {
+					{ remainingTasks.map((todo, index) => {
 						return (
 							<li
 								key={ `todo-${ todo.id }` }
-								className="c-to-do__list-item"
+								className="c-day__list-item"
 							>
 								<Todo
 									id={ todo.id }
@@ -66,13 +78,34 @@ const Day = ({
 							</li>
 						);
 					}) }
-					{ !isBeforeToday(date) && (
-						<NewTodo
-							date={ date }
-							dispatch={ dispatch }
-							placeholder={ isToday && todos.length === 0 ? '+ Add some tasks to get your day started…' : '+ Add' }
-						/>
+					{ !isPast && (
+						<li className="c-day__list-item is-new">
+							<NewTodo
+								date={ date }
+								dispatch={ dispatch }
+								placeholder={ isToday && todos.length === 0 ? '+ Add some tasks to get your day started…' : '+ Add' }
+							/>
+						</li>
 					) }
+					{ completedTasks.map((todo, index) => {
+						return (
+							<li
+								key={ `todo-${ todo.id }` }
+								className={ classnames('c-day__list-item', !isPast && index === 0 ? 'has-separator' : '') }
+							>
+								<Todo
+									id={ todo.id }
+									value={ todo.value }
+									date={ date }
+									order={ todo.order }
+									canMoveUp={ todo.order > 0 }
+									canMoveDown={ todo.order < todos.length - 1 }
+									isComplete={ todo.complete }
+									dispatch={ dispatch }
+								/>
+							</li>
+						);
+					}) }
 				</ul>
 			</div>
 		</div>
