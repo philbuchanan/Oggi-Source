@@ -27,7 +27,7 @@
 	text-align: center;
 	text-transform: uppercase;
 	min-height: 110px;
-	padding: 40px 20px 20px;
+	padding: 40px 20px 15px;
 }
 
 .c-day__date {
@@ -38,5 +38,5 @@
 .c-day__list {
 	overflow-y: scroll;
 	height: calc(100vh - 160px);
-	padding: 10px;
+	padding: 25px 10px;
 }

@@ -2,8 +2,9 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: 30px;
-	height: 30px;
+	border: 1px solid transparent;
+	width: auto;
+	height: auto;
 	padding: 5px;
 	border-radius: 3px;
 	overflow: hidden;
@@ -12,11 +13,11 @@
 	&:focus {
 		outline: none;
 		background-color: #f5f7fe;
-		box-shadow: 0 0 0 1px #b0b9d1;
+		border-color: #d0dbf8;
 	}
 
 	&[disabled] {
 		pointer-events: none;
-		opacity: 0.3;
+		opacity: 0.2;
 	}
 }
