@@ -1,21 +1,43 @@
 .c-day {
 	flex: 1 1 0;
+	background-color: #fff;
+	border-radius: 8px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
-	&:not(:last-child) {
-		border-right: 1px solid #e6e6e9;
+	&:not(.is-today) {
+		margin-top: 40px;
+		margin-bottom: 10px;
 	}
 
 	&.is-today {
 		flex: 0 0 auto;
 		width: 50%;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+		z-index: 100;
 
 		.c-day__title {
+			font-size: 3rem;
 			color: #2c66ee;
 		}
 	}
 
+	&.is-past,
+	&.is-future {
+		color: #767676;
+
+		.c-day__list {
+			height: calc(100% - 105px);
+		}
+	}
+
 	&.is-past {
-		color: #ddd;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	&.is-future {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
 	}
 }
 
@@ -26,17 +48,17 @@
 	align-items: center;
 	text-align: center;
 	text-transform: uppercase;
-	min-height: 110px;
-	padding: 40px 20px 15px;
+	padding: 30px 20px 15px;
 }
 
 .c-day__date {
+	color: #767676;
 	font-size: 0.875rem;
 	font-weight: 700;
 }
 
 .c-day__list {
 	overflow-y: scroll;
-	height: calc(100vh - 160px);
+	height: calc(100% - 126px);
 	padding: 25px 10px;
 }
