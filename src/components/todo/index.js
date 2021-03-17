@@ -55,8 +55,8 @@ const Todo = ({
 				} }
 				onEsc={ (ref) => ref.current.innerText = value }
 			/>
-			{ !isBeforeToday(date) && (
-				<div className="c-to-do__actions">
+			<div className="c-to-do__actions">
+				{ !isBeforeToday(date) && (
 					<IconButton
 						label={ isComplete ? 'Mark incomplete' : 'Mark complete' }
 						icon="checkmark"
@@ -66,76 +66,80 @@ const Todo = ({
 						}) }
 						onFocusChange={ (value) => setIsFocused(value) }
 					/>
-					<IconButton
-						label="Delete"
-						icon="trash"
-						onClick={ () => {
-							if (confirm(`Delete “${ value }”?`)) {
-								dispatch({
-									type: 'remove',
+				) }
+				<IconButton
+					label="Delete"
+					icon="trash"
+					onClick={ () => {
+						if (confirm(`Delete “${ value }”?`)) {
+							dispatch({
+								type: 'remove',
+								id: id,
+								date: date,
+								order: order,
+							});
+						}
+					} }
+					onFocusChange={ (value) => setIsFocused(value) }
+				/>
+				{ !isBeforeToday(date) && (
+					<>
+						<IconButton
+							label="Move Up"
+							icon="arrowUp"
+							disabled={ canMoveUp ? null : true }
+							onClick={ () => dispatch({
+								type: 'moveToPosition',
+								id: id,
+								date: date,
+								from: order,
+								to: order - 1,
+							}) }
+							onFocusChange={ (value) => setIsFocused(value) }
+						/>
+						<IconButton
+							label="Move Down"
+							icon="arrowDown"
+							disabled={ canMoveDown ? null : true }
+							onClick={ () => dispatch({
+								type: 'moveToPosition',
+								id: id,
+								date: date,
+								from: order,
+								to: order + 1,
+							}) }
+							onFocusChange={ (value) => setIsFocused(value) }
+						/>
+						{ isAfterToday(date) ? (
+							<IconButton
+								label="Move to today"
+								icon="arrowLeft"
+								onClick={ () => dispatch({
+									type: 'moveToDate',
 									id: id,
-									date: date,
 									order: order,
-								});
-							}
-						} }
-						onFocusChange={ (value) => setIsFocused(value) }
-					/>
-					<IconButton
-						label="Move Up"
-						icon="arrowUp"
-						disabled={ canMoveUp ? null : true }
-						onClick={ () => dispatch({
-							type: 'moveToPosition',
-							id: id,
-							date: date,
-							from: order,
-							to: order - 1,
-						}) }
-						onFocusChange={ (value) => setIsFocused(value) }
-					/>
-					<IconButton
-						label="Move Down"
-						icon="arrowDown"
-						disabled={ canMoveDown ? null : true }
-						onClick={ () => dispatch({
-							type: 'moveToPosition',
-							id: id,
-							date: date,
-							from: order,
-							to: order + 1,
-						}) }
-						onFocusChange={ (value) => setIsFocused(value) }
-					/>
-					{ isAfterToday(date) ? (
-						<IconButton
-							label="Move to today"
-							icon="arrowLeft"
-							onClick={ () => dispatch({
-								type: 'moveToDate',
-								id: id,
-								order: order,
-								from: date,
-								to: new Date(date.getTime() - 864e5),
-							}) }
-							onFocusChange={ (value) => setIsFocused(value) }
-						/>
-					) : (
-						<IconButton
-							label="Move to tomorrow"
-							icon="arrowRight"
-							onClick={ () => dispatch({
-								type: 'moveToDate',
-								id: id,
-								order: order,
-								from: date,
-								to: new Date(date.getTime() + 864e5),
-							}) }
-							onFocusChange={ (value) => setIsFocused(value) }
-						/>
-					) }
-				</div>
-			) }
+									from: date,
+									to: new Date(date.getTime() - 864e5),
+								}) }
+								onFocusChange={ (value) => setIsFocused(value) }
+							/>
+						) : (
+							<IconButton
+								label="Move to tomorrow"
+								icon="arrowRight"
+								onClick={ () => dispatch({
+									type: 'moveToDate',
+									id: id,
+									order: order,
+									from: date,
+									to: new Date(date.getTime() + 864e5),
+								}) }
+								onFocusChange={ (value) => setIsFocused(value) }
+							/>
+						) }
+					</>
+				) }
+			</div>
 		</div>
 	);
 };
