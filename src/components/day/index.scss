@@ -9,13 +9,6 @@
 		margin-bottom: 10px;
 	}
 
-	&.is-today,
-	&.is-future {
-		.c-day__date {
-			color: #727272;
-		}
-	}
-
 	&.is-today {
 		flex: 0 0 auto;
 		width: 50%;
@@ -28,14 +21,21 @@
 		}
 	}
 
+	&.is-past,
+	&.is-future {
+		color: #767676;
+
+		.c-day__list {
+			height: calc(100% - 105px);
+		}
+	}
+
 	&.is-past {
-		color: #ddd;
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 	}
 
 	&.is-future {
-		color: #727272;
 		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
 	}
@@ -48,17 +48,17 @@
 	align-items: center;
 	text-align: center;
 	text-transform: uppercase;
-	min-height: 110px;
-	padding: 30px 20px 0;
+	padding: 30px 20px 15px;
 }
 
 .c-day__date {
+	color: #767676;
 	font-size: 0.875rem;
 	font-weight: 700;
 }
 
 .c-day__list {
 	overflow-y: scroll;
-	height: calc(100vh - 160px);
+	height: calc(100% - 126px);
 	padding: 25px 10px;
 }
