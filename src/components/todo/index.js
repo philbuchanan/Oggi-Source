@@ -23,7 +23,7 @@ const Todo = ({
 	const [isFocused, setIsFocused] = useState(false);
 
 	return (
-		<li
+		<div
 			className={ classnames(
 				'c-to-do__item',
 				`is-order-${ order + 1 }`,
@@ -124,7 +124,7 @@ const Todo = ({
 					) }
 				</div>
 			) }
-		</li>
+		</div>
 	);
 };
 

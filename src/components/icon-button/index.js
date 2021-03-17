@@ -9,10 +9,10 @@ const IconButton = ({
 	onFocusChange,
 	...props
 }) => {
-	const [isFocused, setIsFocused] = useState(false);
+	const [showTooltip, setShowTooltip] = useState(false);
 
 	const focusChange = (value) => {
-		setIsFocused(value);
+		setShowTooltip(value);
 		onFocusChange(value);
 	};
 
@@ -57,13 +57,13 @@ const IconButton = ({
 	return (
 		<Tooltip
 			text={ label }
-			isOpen={ isFocused }
+			isOpen={ showTooltip }
 		>
 			<button
 				className="c-icon-button"
 				onClick={ onClick }
-				onMouseEnter={ () => focusChange(true) }
-				onMouseLeave={ () => focusChange(false) }
+				onMouseEnter={ () => setShowTooltip(true) }
+				onMouseLeave={ () => setShowTooltip(false) }
 				onFocus={ () => focusChange(true) }
 				onBlur={ () => focusChange(false) }
 				{ ...props }

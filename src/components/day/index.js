@@ -37,17 +37,21 @@ const Day = ({
 				<ul className="o-list-bare c-to-do__list">
 					{ todos.sort((a, b) => a.order > b.order).map((todo, index) => {
 						return (
-							<Todo
+							<li
 								key={ `todo-${ todo.id }` }
-								id={ todo.id }
-								value={ todo.value }
-								date={ date }
-								order={ todo.order }
-								canMoveUp={ todo.order > 0 }
-								canMoveDown={ todo.order < todos.length - 1 }
-								isComplete={ todo.complete }
-								dispatch={ dispatch }
-							/>
+								className="c-to-do__list-item"
+							>
+								<Todo
+									id={ todo.id }
+									value={ todo.value }
+									date={ date }
+									order={ todo.order }
+									canMoveUp={ todo.order > 0 }
+									canMoveDown={ todo.order < todos.length - 1 }
+									isComplete={ todo.complete }
+									dispatch={ dispatch }
+								/>
+							</li>
 						);
 					}) }
 					{ !isBeforeToday(date) && (

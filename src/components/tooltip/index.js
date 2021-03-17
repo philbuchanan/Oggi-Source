@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { classnames } from '../../utils';
 import './index.scss';
 
@@ -5,11 +6,32 @@ const Tooltip = ({
 	children,
 	text,
 	isOpen = false,
+	delay = 1000,
 }) => {
+	const [showTooltip, setShowTooltip] = useState(false);
+
+	useEffect(() => {
+		let timer = null;
+
+		if (isOpen) {
+			timer = setTimeout(() => {
+				setShowTooltip(true);
+			}, delay);
+		}
+		else {
+			clearTimeout(timer);
+			setShowTooltip(false);
+		}
+
+		return () => {
+			clearTimeout(timer);
+		}
+	}, [isOpen]);
+
 	return (
-		<div className={ classnames('c-tooltip', isOpen ? 'is-open' : '') }>
+		<div className={ classnames('c-tooltip', showTooltip ? 'is-open' : '') }>
 			{ children }
-			{ isOpen && (
+			{ showTooltip && (
 				<div className="c-tooltip__popover">
 					{ text }
 				</div>

@@ -9,7 +9,7 @@ const NewTodo = ({
 	const [isFocused, setIsFocused] = useState(false);
 
 	return (
-		<li
+		<div
 			className={ classnames(
 				'c-to-do__item',
 				isFocused ? 'is-focused' : ''
@@ -30,7 +30,7 @@ const NewTodo = ({
 				} }
 				onEsc={ (ref) => ref.current.innerText = '' }
 			/>
-		</li>
+		</div>
 	);
 };
 
