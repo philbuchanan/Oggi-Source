@@ -23,14 +23,13 @@
 
 	&.is-past,
 	&.is-future {
-		color: #767676;
-
 		.c-day__list {
 			height: calc(100% - 105px);
 		}
 	}
 
 	&.is-past {
+		color: #767676;
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
 	}
