@@ -5,6 +5,7 @@ import { classnames } from '../../utils';
 const NewTodo = ({
 	date,
 	dispatch,
+	placeholder = '+ Add',
 }) => {
 	const [isFocused, setIsFocused] = useState(false);
 
@@ -33,7 +34,7 @@ const NewTodo = ({
 				onEsc={ (ref) => ref.current.innerText = '' }
 			/>
 			<div className="c-to-do__edit-placeholder">
-				+ Add
+				{ placeholder }
 			</div>
 		</div>
 	);

@@ -1,0 +1,48 @@
+.c-empty-state {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 0.875rem;
+	text-transform: none;
+	width: 100%;
+	margin-top: 8px;
+}
+
+.c-empty-state__content {
+	position: relative;
+	//background-color: #f5f7fe;
+	text-align: center;
+	//border-radius: 8px;
+	//padding: 30px 60px;
+	//box-shadow: inset 0 1px 2px rgba(#d0dbf8, 0.6);
+}
+
+.c-empty-state__icon {
+	position: absolute;
+	top: -6px;
+	right: -36px;
+	animation-name: rocket;
+	animation-duration: 4s;
+	animation-timing-function: ease-in;
+}
+
+@keyframes rocket {
+	10% {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+	50% {
+		opacity: 1;
+	}
+	60% {
+		transform: translate3d(250px, -250px, 0);
+		opacity: 0;
+	}
+	80% {
+		transform: translate3d(0, 0, 0);
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
