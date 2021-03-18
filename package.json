@@ -2,6 +2,7 @@
   "name": "To Dos",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://philbuchanan.com/Oggi",
   "dependencies": {
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
