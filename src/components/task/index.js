@@ -62,7 +62,7 @@ const Task = ({
 				{ !isBeforeToday(date) && (
 					<IconButton
 						label={ isComplete ? 'Mark incomplete' : 'Mark complete' }
-						icon="checkmark"
+						icon={ isComplete ? 'checkmarkIncomplete' : 'checkmark' }
 						onClick={ () => dispatch({
 							type: 'toggleComplete',
 							id: id,
