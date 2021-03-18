@@ -2,7 +2,7 @@ import { useEffect, useState, useReducer } from 'react';
 import { Day } from './components/';
 import {
 	areSameDate,
-	getShortDateString,
+	getYearMonthDayString,
 	isBeforeToday,
 	isBeforeYesterday,
 } from './dates/';
@@ -13,113 +13,108 @@ import './App.scss';
 function App() {
 	const [today, setToday] = useState(new Date());
 
-	const getDatesTodos = (state, date) => {
-		const dateString = getShortDateString(date);
+	const getDatesTasks = (state, date) => {
+		const dateString = typeof date === 'string'
+			? date : getYearMonthDayString(date);
 
-		return state.reduce((todos, todo) => {
-			if (dateString === todo.date) {
-				todos.push(todo);
+		return state.reduce((tasks, task) => {
+			if (dateString === task.date) {
+				tasks.push(task);
 			}
 
-			return todos;
+			return tasks;
 		}, []);
 	};
 
-	const getDatesTodoCount = (state, date) => {
-		return getDatesTodos(state, date).length;
+	const getDatesTaskCount = (tasks, date) => {
+		return getDatesTasks(tasks, date).length;
 	};
 
-	const todoReducer = (state, action) => {
+	const taskReducer = (state, action) => {
 		switch (action.type) {
 			case 'toggleComplete':
-				return state.map(todo => todo.id === action.id
-					? {...todo, complete: !todo.complete}
-					: todo
+				return state.map(task => task.id === action.id
+					? {...task, complete: !task.complete}
+					: task
 				);
 			case 'add':
 				return [...state, {
 					id: uuid(),
 					value: action.value,
-					date: getShortDateString(action.date),
-					order: getDatesTodoCount(state, action.date),
+					date: action.date,
+					order: getDatesTaskCount(state, action.date),
 					complete: false,
 				}];
 			case 'update':
-				return state.map(todo => todo.id === action.id
-					? {...todo, value: action.value}
-					: todo
+				return state.map(task => task.id === action.id
+					? {...task, value: action.value}
+					: task
 				);
 			case 'remove':
-				let reorderDate = getShortDateString(action.date);
-
-				return state.reduce((newState, todo) => {
-					if (todo.id !== action.id) {
+				return state.reduce((newState, task) => {
+					if (task.id !== action.id) {
 						newState.push(
-							todo.date === reorderDate
-							&& todo.order > action.order
-								? {...todo, order: todo.order - 1}
-								: todo
+							task.date === action.date
+							&& task.order > action.order
+								? {...task, order: task.order - 1}
+								: task
 						);
 					}
 
 					return newState;
 				}, []);
 			case 'moveToDate':
-				const fromDate = getShortDateString(action.from);
-				const toDatesTodoCount = getDatesTodoCount(state, action.to);
-
-				return state.map(todo => {
-					if (todo.id === action.id) {
+				return state.map(task => {
+					if (task.id === action.id) {
 						return {
-							...todo,
-							date: getShortDateString(action.to),
-							order: toDatesTodoCount,
+							...task,
+							date: action.to,
+							order: getDatesTaskCount(state, action.to),
 						};
 					}
 					else if (
-						todo.date === fromDate
-						&& todo.order > action.order
+						task.date === action.from
+						&& task.order > action.order
 					) {
 						return {
-							...todo,
-							order: todo.order - 1,
+							...task,
+							order: task.order - 1,
 						};
 					}
 
-					return todo;
+					return task;
 				});
 			case 'moveToPosition':
 				const moveDirection = action.from - action.to;
-				const day = getShortDateString(action.date);
 
 				if (moveDirection === 0) {
 					return state;
 				}
 
-				return state.reduce((reordered, todo) => {
-					let newTodo = {...todo};
+				return state.reduce((reordered, task) => {
+					let newTask = null;
 
-					if (todo.date === day) {
-						if (action.id === todo.id) {
-							newTodo = {...todo, order: action.to};
+					if (task.date === action.date) {
+						if (action.id === task.id) {
+							newTask = {...task, order: action.to};
 						}
 						else if (
 							moveDirection < 0 // negative numbers mean move down
-							&& todo.order > action.from
-							&& todo.order <= action.to
+							&& task.order > action.from
+							&& task.order <= action.to
 						) {
-							newTodo = {...todo, order: todo.order - 1};
+							newTask = {...task, order: task.order - 1};
 						}
 						else if (
 							moveDirection > 0 // positive numbers mean move up
-							&& todo.order >= action.to
-							&& todo.order < action.from
+							&& task.order >= action.to
+							&& task.order < action.from
 						) {
-							newTodo = {...todo, order: todo.order + 1};
+							newTask = {...task, order: task.order + 1};
 						}
 					}
 
-					reordered.push(newTodo);
+					reordered.push(newTask ? newTask : task);
 
 					return reordered;
 				}, []);
@@ -130,39 +125,39 @@ function App() {
 		}
 	}
 
-	const [initialState, setTodos] = useLocalStorage('todos', []);
-	const [todos, dispatch] = useReducer(todoReducer, initialState);
+	const [initialState, setTasks] = useLocalStorage('tasks', []);
+	const [tasks, dispatch] = useReducer(taskReducer, initialState);
 
 	useEffect(() => {
-		let todoOrderStart = getDatesTodoCount(todos, today);
+		let taskOrderStart = getDatesTaskCount(tasks, today);
 
-		const updatedTodos = todos.reduce((newTodos, todo) => {
-			const todoDate = new Date(`${ todo.date }T00:00:00`);
+		const updatedTasks = tasks.reduce((newTasks, task) => {
+			const taskDate = new Date(`${ task.date }T00:00:00`);
 
-			if (isBeforeToday(todoDate)) {
-				if (!todo.complete) {
-					newTodos.push({
-						...todo,
-						date: getShortDateString(today),
-						order: todoOrderStart,
+			if (isBeforeToday(taskDate)) {
+				if (!task.complete) {
+					newTasks.push({
+						...task,
+						date: getYearMonthDayString(today),
+						order: taskOrderStart,
 					});
 
-					todoOrderStart += 1;
+					taskOrderStart += 1;
 				}
-				else if (!isBeforeYesterday(todoDate)) {
-					newTodos.push(todo);
+				else if (!isBeforeYesterday(taskDate)) {
+					newTasks.push(task);
 				}
 			}
 			else {
-				newTodos.push(todo);
+				newTasks.push(task);
 			}
 
-			return newTodos;
+			return newTasks;
 		}, []);
 
 		dispatch({
 			type: 'replaceState',
-			state: updatedTodos,
+			state: updatedTasks,
 		});
 
 		// Rerun at the end of the day
@@ -176,30 +171,26 @@ function App() {
 		return () => {
 			clearTimeout(endOfDayTimer);
 		}
-	}, [getShortDateString(today)]);
+	}, [getYearMonthDayString(today)]);
 
 	useEffect(() => {
-		setTodos(todos);
-	}, [JSON.stringify(todos)]);
-
-	const days = [
-		new Date(today.getTime() - 864e5),
-		today,
-		new Date(today.getTime() + 864e5),
-	];
+		setTasks(tasks.sort((a, b) => a.order > b.order));
+	}, [JSON.stringify(tasks)]);
 
 	return (
 		<div className="c-app">
-			{ days.map((day) => {
-				return (
-					<Day
-						key={ `day-${ day.getDate() }` }
-						date={ day }
-						todos={ getDatesTodos(todos, day) }
-						dispatch={ dispatch }
-					/>
-				);
-			}) }
+			{ [
+				new Date(today.getTime() - 864e5),
+				today,
+				new Date(today.getTime() + 864e5),
+			].map((day) =>
+				<Day
+					key={ `day-${ day.getDate() }` }
+					date={ day }
+					tasks={ getDatesTasks(tasks, day) }
+					dispatch={ dispatch }
+				/>
+			) }
 		</div>
 	);
 }

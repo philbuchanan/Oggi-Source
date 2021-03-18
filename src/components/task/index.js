@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+	getYearMonthDayString,
 	isAfterToday,
 	isBeforeToday,
 } from '../../dates/';
@@ -10,7 +11,7 @@ import {
 import { classnames } from '../../utils';
 import './index.scss';
 
-const Todo = ({
+const Task = ({
 	id,
 	value,
 	date,
@@ -22,17 +23,19 @@ const Todo = ({
 }) => {
 	const [isFocused, setIsFocused] = useState(false);
 
+	const taskDateObj = new Date(`${ date }T00:00:00`);
+
 	return (
 		<div
 			className={ classnames(
-				'c-to-do__item',
+				'c-task',
 				`is-order-${ order + 1 }`,
 				isComplete ? 'is-complete' : '',
 				isFocused ? 'is-focused' : ''
 			) }
 		>
 			<ContentEditable
-				className="c-to-do__edit"
+				className="c-task__edit"
 				value={ value }
 				disabled={ isBeforeToday(date) }
 				onChangeFocus={ (state) => setIsFocused(state) }
@@ -55,7 +58,7 @@ const Todo = ({
 				} }
 				onEsc={ (ref) => ref.current.innerText = value }
 			/>
-			<div className="c-to-do__actions">
+			<div className="c-task__actions">
 				{ !isBeforeToday(date) && (
 					<IconButton
 						label={ isComplete ? 'Mark incomplete' : 'Mark complete' }
@@ -82,7 +85,7 @@ const Todo = ({
 					} }
 					onFocusChange={ (value) => setIsFocused(value) }
 				/>
-				{ !isBeforeToday(date) && (
+				{ !isComplete && !isBeforeToday(date) && (
 					<>
 						<IconButton
 							label="Move Up"
@@ -110,7 +113,7 @@ const Todo = ({
 							}) }
 							onFocusChange={ (value) => setIsFocused(value) }
 						/>
-						{ isAfterToday(date) ? (
+						{ isAfterToday(taskDateObj) ? (
 							<IconButton
 								label="Move to today"
 								icon="arrowLeft"
@@ -119,7 +122,7 @@ const Todo = ({
 									id: id,
 									order: order,
 									from: date,
-									to: new Date(date.getTime() - 864e5),
+									to: getYearMonthDayString(new Date(taskDateObj.getTime() - 864e5)),
 								}) }
 								onFocusChange={ (value) => setIsFocused(value) }
 							/>
@@ -132,7 +135,7 @@ const Todo = ({
 									id: id,
 									order: order,
 									from: date,
-									to: new Date(date.getTime() + 864e5),
+									to: getYearMonthDayString(new Date(taskDateObj.getTime() + 864e5)),
 								}) }
 								onFocusChange={ (value) => setIsFocused(value) }
 							/>
@@ -144,4 +147,4 @@ const Todo = ({
 	);
 };
 
-export default Todo;
+export default Task;

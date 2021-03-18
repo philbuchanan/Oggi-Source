@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ContentEditable } from '../';
 import { classnames } from '../../utils';
 
-const NewTodo = ({
+const NewTask = ({
 	date,
 	dispatch,
 	placeholder = '+ Add',
@@ -12,13 +12,12 @@ const NewTodo = ({
 	return (
 		<div
 			className={ classnames(
-				'c-to-do__item',
+				'c-task',
 				isFocused ? 'is-focused' : ''
 			) }
 		>
 			<ContentEditable
-				className="c-to-do__edit"
-				value=""
+				className="c-task__edit"
 				onChangeFocus={ (state) => setIsFocused(state) }
 				onSave={ (value, ref) => {
 					if (value !== '') {
@@ -33,11 +32,11 @@ const NewTodo = ({
 				} }
 				onEsc={ (ref) => ref.current.innerText = '' }
 			/>
-			<div className="c-to-do__edit-placeholder">
+			<div className="c-task__edit-placeholder">
 				{ placeholder }
 			</div>
 		</div>
 	);
 };
 
-export default NewTodo;
+export default NewTask;

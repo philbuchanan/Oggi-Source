@@ -1,0 +1,7 @@
+.c-task-list__item {
+	&.has-separator {
+		margin-bottom: 5px;
+		padding-bottom: 5px;
+		border-bottom: 1px dashed #d0dbf8;
+	}
+}

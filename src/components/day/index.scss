@@ -61,11 +61,3 @@
 	height: calc(100% - 126px);
 	padding: 25px 10px;
 }
-
-.c-day__list-item {
-	&.has-separator {
-		margin-top: 5px;
-		padding-top: 5px;
-		border-top: 1px dashed #d0dbf8;
-	}
-}

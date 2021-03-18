@@ -1,8 +1,8 @@
 export { default as areSameDate } from './are-same-date';
 export { default as daysOfWeek } from './days-of-week';
 export { default as getDateString } from './get-date-string';
-export { default as getDayString } from './get-day-string';
-export { default as getShortDateString } from './get-short-date-string';
+export { default as getDayOfWeekString } from './get-day-of-week-string';
+export { default as getYearMonthDayString } from './get-year-month-day-string';
 export { default as isAfterToday } from './is-after-today';
 export { default as isBeforeToday } from './is-before-today';
 export { default as isBeforeYesterday } from './is-before-yesterday';

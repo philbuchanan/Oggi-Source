@@ -1,4 +1,4 @@
-const getShortDateString = (date) => {
+const getYearMonthDayString = (date) => {
 	if (typeof date.getMonth !== 'function') {
 		return '';
 	}
@@ -9,4 +9,4 @@ const getShortDateString = (date) => {
 	return `${ date.getFullYear() }-${ month }-${ day }`;
 };
 
-export default getShortDateString;
+export default getYearMonthDayString;

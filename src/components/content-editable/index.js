@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 const ContentEditable = ({
-	value,
+	value = '',
 	disabled,
 	onSave,
 	onChangeFocus,

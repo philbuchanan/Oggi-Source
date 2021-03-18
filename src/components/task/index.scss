@@ -1,4 +1,4 @@
-.c-to-do__item {
+.c-task {
 	position: relative;
 	border-radius: 5px;
 	border: 1px solid transparent;
@@ -6,7 +6,7 @@
 	padding-right: 10px;
 
 	&.is-complete {
-		.c-to-do__edit {
+		.c-task__edit {
 			color: #767676;
 			text-decoration: line-through;
 
@@ -25,7 +25,7 @@
 	&.is-focused {
 		outline: none;
 
-		.c-to-do__actions {
+		.c-task__actions {
 			display: flex;
 		}
 	}
@@ -35,25 +35,27 @@
 		background-color: #f5f7fe;
 		border-color: #d0dbf8;
 
-		.c-to-do__edit {
+		.c-task__edit {
 			outline: none;
 			color: #000;
 			border-color: transparent;
 		}
 
-		.c-to-do__edit-placeholder {
+		.c-task__edit-placeholder {
 			display: none;
 		}
 	}
 }
 
-.c-to-do__edit {
+.c-task__edit {
+	position: relative;
 	outline: none;
 	padding-top: 8px;
 	padding-bottom: 8px;
+	z-index: 100;
 }
 
-.c-to-do__edit-placeholder {
+.c-task__edit-placeholder {
 	position: absolute;
 	display: flex;
 	align-items: center;
@@ -63,7 +65,7 @@
 	color: #767676;
 }
 
-.c-to-do__actions {
+.c-task__actions {
 	position: absolute;
 	top: -25px;
 	right: 6px;

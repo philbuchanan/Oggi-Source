@@ -5,7 +5,7 @@ import {
 	isYesterday,
 } from '../';
 
-const getDayString = (date, useRelative = true) => {
+const getDayOfWeekString = (date, useRelative = true) => {
 	if (typeof date.getMonth !== 'function') {
 		return '';
 	}
@@ -25,4 +25,4 @@ const getDayString = (date, useRelative = true) => {
 	return daysOfWeek[date.getDay()];
 };
 
-export default getDayString;
+export default getDayOfWeekString;
