@@ -74,7 +74,7 @@ const Task = ({
 					label="Delete"
 					icon="trash"
 					onClick={ () => {
-						if (confirm(`Delete “${ value }”?`)) {
+						if (window.confirm(`Delete “${ value }”?`)) {
 							dispatch({
 								type: 'remove',
 								id: id,
